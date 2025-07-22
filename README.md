@@ -30,25 +30,7 @@ Compare the result against the checksum provided from the FTP server.
 
 ---
 
-## 3. Extract Variant Coordinates
-
-Use `bcftools` to extract variant positions from the VCF file and convert them into BED format:
-
-```bash
-conda activate baseToolsStation
-bcftools query -f '%CHROM\t%POS\t%POS\n' GCF_000001405.40.gz > dbsnp157_hg38.bed
-```
-!!! the %CHROM is contigs, need to be rename to chr* later
-
-This command creates the output file:
-
-- `dbsnp157_hg38.bed`
-
-Each line contains chromosome, start, and end positions of a variant.
-
----
-
-## 4. Extract Variant only Biallelic with Valid RSid
+## 3. Extract Variant only Biallelic with Valid RSid
 I think we use Biallelic with Valid RSid to select the trustful SNPs as reference, so directly select them as below maybe better. [discuss needed]
 ```bash
 bcftools view \
@@ -59,7 +41,7 @@ bcftools view \
 
 ```
 
-## Rename the CHROM from contigs to CHR*
+## 4. Rename the CHROM from contigs to CHR*
 to check the CHROM format in the reference vcf file
 ```bash
  bcftools query -f '%CHROM\n' GCF_000001405.40.gz |uniq
