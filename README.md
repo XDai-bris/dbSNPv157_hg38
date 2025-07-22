@@ -57,14 +57,7 @@ bcftools view \
   -i 'ID ~ "^rs"' \
   GCF_000001405.40.gz -Oz -o dbsnp157_biallelic_rs_hg38.vcf.gz
 
-bcftools query \
-  -f '%CHROM\t%POS\t%POS\n' \
-  dbsnp157_biallelic_rs_hg38.vcf.gz > dbsnp157_biallelic_rs_hg38.bed
-
 ```
-This command creates the output file:
-
-- `dbsnp157_biallelic_rs_hg38.bed` and `dbsnp157_biallelic_rs_hg38.vcf.gz`
 
 ## Rename the CHROM from contigs to CHR*
 to check the CHROM format in the reference vcf file
@@ -85,6 +78,7 @@ write.table(out, file = 'RefSeq.seq.accession2UCSC.style.name.txt', quote = F,
  bcftools annotate --rename-chrs RefSeq.seq.accession2UCSC.style.name.txt dbsnp157_biallelic_rs_hg38.vcf.gz -Oz -o dbsnp157_biallelic_rs_hg38_UCSC.vcf.gz
 
  bcftools query -f '%CHROM\n' dbsnp157_biallelic_rs_hg38_UCSC.vcf.gz|uniq
+ 
  bcftools query -f '%CHROM\t%POS\n' dbsnp157_biallelic_rs_hg38_UCSC.vcf.gz > dbsnp157_biallelic_rs_hg38_UCSC.tab 
 ```
 
