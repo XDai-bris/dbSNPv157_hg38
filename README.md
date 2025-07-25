@@ -31,7 +31,6 @@ Compare the result against the checksum provided from the FTP server.
 ---
 
 ## 3. Extract Variant only Biallelic with Valid RSid
-I think we use Biallelic with Valid RSid to select the trustful SNPs as reference, so directly select them as below maybe better. [discuss needed]
 ```bash
 bcftools view \
   -v snps \
