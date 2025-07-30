@@ -30,13 +30,12 @@ Compare the result against the checksum provided from the FTP server.
 
 ---
 
-## 3. Extract Variant only Biallelic with Valid RSid
+## 3. Extract Variant only with Valid RSid
 ```bash
 bcftools view \
   -v snps \
-  --min-alleles 2 --max-alleles 2 \
   -i 'ID ~ "^rs"' \
-  GCF_000001405.40.gz -Oz -o dbsnp157_biallelic_rs_hg38.vcf.gz
+  GCF_000001405.40.gz -Oz -o dbsnp157_rs_hg38.vcf.gz
 
 ```
 
@@ -56,15 +55,20 @@ write.table(out, file = 'RefSeq.seq.accession2UCSC.style.name.txt', quote = F,
             sep = " ", row.names = F, col.names = F)
 ```
 ```bash
- bcftools annotate --rename-chrs RefSeq.seq.accession2UCSC.style.name.txt dbsnp157_biallelic_rs_hg38.vcf.gz -Oz -o dbsnp157_biallelic_rs_hg38_UCSC.vcf.gz
+ bcftools annotate --rename-chrs RefSeq.seq.accession2UCSC.style.name.txt dbsnp157_rs_hg38.vcf.gz -Oz -o dbsnp157_rs_hg38_UCSC.vcf.gz
+ bcftools query -f '%CHROM\n' dbsnp157_rs_hg38_UCSC.vcf.gz|uniq
+ bcftools query -f '%CHROM\t%POS\n' dbsnp157_rs_hg38_UCSC.vcf.gz > dbsnp157_rs_hg38_UCSC.tab 
+```
 
- bcftools query -f '%CHROM\n' dbsnp157_biallelic_rs_hg38_UCSC.vcf.gz|uniq
- 
- bcftools query -f '%CHROM\t%POS\n' dbsnp157_biallelic_rs_hg38_UCSC.vcf.gz > dbsnp157_biallelic_rs_hg38_UCSC.tab 
+## 5. Merged src.sh
+```bash
+       bcftools view -v snps -i 'ID ~ "^rs"' GCF_000001405.40.gz -Ou | \
+       bcftools annotate --rename-chrs RefSeq.seq.accession2UCSC.style.name.txt -Ou | \
+       bcftools query -f '%CHROM\t%POS\n' > dbsnp157_rs_hg38_UCSC.tab
 ```
 
 # futher information when using bcftool -R with .bed and .tab file 
-       Regions can be specified either on command line or in a VCF, BED, or tab-delimited file (the default). The columns of the tab-delimited file can contain either positions (two-column format: CHROM, POS) or intervals (three-column format: CHROM, BEG, END), but not both. Positions are 1-based and inclusive. The columns of the tab-delimited BED file are also CHROM, POS and END (trailing columns are ignored), but coordinates are 0-based, half-open. To indicate that a file be treated as BED rather than the 1-based tab-delimited file, the file must have the ".bed" or ".bed.gz" suffix (case-insensitive). Uncompressed files are stored in memory, while bgzip-compressed and tabix-indexed region files are streamed. Note that sequence names must match exactly, "chr20" is not the same as "20". Also note that chromosome ordering in FILE will be respected, the VCF will be processed in the order in which chromosomes first appear in FILE. However, within chromosomes, the VCF will always be processed in ascending genomic coordinate order no matter what order they appear in FILE. Note that overlapping regions in FILE can result in duplicated out of order positions in the output. This option requires indexed VCF/BCF files. Note that -R cannot be used in combination with -r.
+       Regions can be specified either on command line or in a VCF, BED, or tab-delimited file (the default). The columns of the tab-delimited file can contain either positions (two-column format: CHROM, POS) or intervals (three-column format: CHROM, BEG, END), but not both. Positions are 1-based and inclusive. The columns of the tab-delimited BED file are also CHROM, POS and END (trailing columns are ignored), but coordinates are 0-based, half-open. To indicate that a file be treated as BED rather than the 1-based tab-delimited file, the file must have the ".bed" or ".bed.gz" suffix (case-insensitive).
 
 ## 5. dbSNP Build 157 Release Notes Summary
 
